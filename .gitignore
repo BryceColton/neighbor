@@ -2,7 +2,6 @@
 node_modules/
 
 # Builds / dist
-dist/
 build/
 out/
 .tmp/
