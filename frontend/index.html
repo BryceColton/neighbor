@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Vehicle Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .results {
+      margin-top: 20px;
+    }
+    .error {
+      color: red;
+    }
+    .vehicle-entry {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Multi-Vehicle Search</h1>
+  <form id="vehicleForm">
+    <div id="vehicleEntries">
+      <div class="vehicle-entry">
+        <label>Length: <input type="number" name="length" value="10" required></label>
+        <label>Quantity: <input type="number" name="quantity" value="1" required></label>
+        <button type="button" class="remove-entry">Remove</button>
+      </div>
+    </div>
+    <button type="button" id="addVehicle">Add Vehicle</button><br><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <div class="results">
+    <h2>Results</h2>
+    <pre id="results"></pre>
+    <p id="error" class="error"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('vehicleForm');
+    const vehicleEntries = document.getElementById('vehicleEntries');
+    const addVehicleButton = document.getElementById('addVehicle');
+    const resultsContainer = document.getElementById('results');
+    const errorContainer = document.getElementById('error');
+
+    addVehicleButton.addEventListener('click', () => {
+      const entry = document.createElement('div');
+      entry.className = 'vehicle-entry';
+      entry.innerHTML = `
+        <label>Length: <input type="number" name="length" value="10" required></label>
+        <label>Quantity: <input type="number" name="quantity" value="1" required></label>
+        <button type="button" class="remove-entry">Remove</button>
+      `;
+      vehicleEntries.appendChild(entry);
+
+      entry.querySelector('.remove-entry').addEventListener('click', () => {
+        vehicleEntries.removeChild(entry);
+      });
+    });
+
+    vehicleEntries.addEventListener('click', (event) => {
+      if (event.target.classList.contains('remove-entry')) {
+        const entry = event.target.closest('.vehicle-entry');
+        vehicleEntries.removeChild(entry);
+      }
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      resultsContainer.textContent = '';
+      errorContainer.textContent = '';
+
+      try {
+        const vehicles = Array.from(vehicleEntries.children).map(entry => {
+          const length = entry.querySelector('input[name="length"]').value;
+          const quantity = entry.querySelector('input[name="quantity"]').value;
+          return { length: parseInt(length, 10), quantity: parseInt(quantity, 10) };
+        });
+
+        const response = await fetch('http://localhost:3000', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(vehicles)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        resultsContainer.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        errorContainer.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>

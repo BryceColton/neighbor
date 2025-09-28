@@ -1,0 +1,81 @@
+# Dependencies
+node_modules/
+
+# Builds / dist
+dist/
+build/
+out/
+.tmp/
+.temp/
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage / tests
+coverage/
+.nyc_output/
+jest-cache/
+jest-temp/
+
+# Env / secrets
+.env
+.env.*.local
+*.env
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# Caches
+.cache/
+.eslintcache
+parcel-cache/
+.next/
+.nuxt/
+.svelte-kit/
+vite.config.ts.timestamp-*
+.rpt2_cache/
+.ts-cache/
+turbo/
+.swc/
+
+# Package manager
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Optional: remove above three lines if you want to commit lockfiles
+
+# Temporary
+*.tmp
+*.swp
+
+# Archives
+*.tgz
+
+# Generated JSON (if any)
+*.report.json
+
+# Coverage artifacts
+lcov.info
