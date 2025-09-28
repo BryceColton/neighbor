@@ -35,7 +35,7 @@ app.post('/', (req, res) => {
     }
   });
   
-  const port = process.env.PORT || 3000;
-  app.listen(port, () => {
-    console.log('listening on ' + port);
+  const port = 3000;
+  app.listen(port, '0.0.0.0', () => {
+    console.log(`Server running on port ${port}`);
   });
