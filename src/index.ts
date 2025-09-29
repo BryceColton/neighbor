@@ -3,7 +3,7 @@ import cors from 'cors';
 import { solveMultiVehicle } from './algorithm'
 import listings from './data/listings.json';
 import { VehicleRequest } from './types/models';
-
+import process from 'process';
 const app = express();
 app.use(cors({ origin: 'http://127.0.0.1:5500' }));
 app.use(express.json());
@@ -38,7 +38,7 @@ app.post('/', (req, res) => {
     }
   });
   
-  const port = 3000;
+  const port: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
   app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on port ${port}`);
   });
