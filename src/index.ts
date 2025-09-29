@@ -5,6 +5,7 @@ import listings from './data/listings.json';
 import { VehicleRequest } from './types/models';
 import process from 'process';
 const app = express();
+// I used a frontend to help test
 app.use(cors({ origin: 'http://127.0.0.1:5500' }));
 app.use(express.json());
 

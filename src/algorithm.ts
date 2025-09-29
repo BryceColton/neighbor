@@ -15,8 +15,7 @@ export function solveMultiVehicle(
   listingsByLocation: ListingsByLocation
 ): locations[] {
 
-  // Sorting vehicles by largest to smalles length based off of the minimum length required
-  // This will help know which vehicles should go in which locations
+  // Sorting vehicles by largest to smalles length based off of the minimum length
   const spreadVehicles: number[] = 
   vehicles
   .flatMap(vehicle => Array.from({ length: vehicle.quantity }, () => vehicle.length ))
@@ -24,17 +23,16 @@ export function solveMultiVehicle(
 
   const results: locations[] = [];
 
-
-
-    for (const [location_id, listings] of Object.entries(listingsByLocation)) {
-      if (cheapestSubset(spreadVehicles, listings)) {
-        results.push({
-          location_id,
-          listing_ids: listings.map(listing => listing.id),
-          total_price_in_cents: listings.reduce((s, l) => s + l.price_in_cents, 0)
-        });
-      }
+  for (const [location_id, listings] of Object.entries(listingsByLocation)) {
+    const subset = cheapestSubset(spreadVehicles, listings);
+    if (subset) {
+      results.push({
+        location_id,
+        listing_ids: subset.map(l => l.id),
+        total_price_in_cents: subset.reduce((s, l) => s + l.price_in_cents, 0)
+      });
     }
+  }
 
   //    The results should:
   // 1. Include every possible location that could store all requested vehicles
@@ -66,10 +64,10 @@ function vehiclesFit(vehicleLengths: number[], listings: Listing[]): boolean {
 
 function cheapestSubset(vehicleLengths: number[], listings: Listing[]): Listing[] | null {
   if (!listings.length) return null;
-  // Get listings sorted by price per length, which sites are most cost effective
-  const sorted = [...listings].sort(
-    (a,b) => (a.price_in_cents / a.length) - (b.price_in_cents / b.length)
-  );
+  // Getting listings by price per length
+  const sorted = listings 
+  .filter(l => l.length > 0)
+  .sort((a, b) => (a.price_in_cents / a.length) - (b.price_in_cents / b.length));
 
   const selectedListings: Listing[] = [];
   for (const l of sorted) {
