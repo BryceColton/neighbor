@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const algorithm_1 = require("./algorithm");
 const listings_json_1 = __importDefault(require("./data/listings.json"));
+const process_1 = __importDefault(require("process"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({ origin: 'http://127.0.0.1:5500' }));
 app.use(express_1.default.json());
@@ -15,6 +16,9 @@ const listingsByLocation = listings_json_1.default.reduce((acc, l) => {
     (acc[_a = l.location_id] || (acc[_a] = [])).push(l);
     return acc;
 }, {});
+app.get('/health', (_req, res) => {
+    res.json({ status: 'ok', message: 'POST an array of vehicles to this endpoint' });
+});
 app.post('/', (req, res) => {
     try {
         const vehicles = req.body;
@@ -29,7 +33,7 @@ app.post('/', (req, res) => {
         res.status(500).json({ error: 'Internal error' });
     }
 });
-const port = 3000;
+const port = process_1.default.env.PORT ? parseInt(process_1.default.env.PORT, 10) : 3000;
 app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on port ${port}`);
 });
