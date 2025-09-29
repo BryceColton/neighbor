@@ -20,7 +20,7 @@ const listingsByLocation: GroupedListings = listings.reduce((acc, l: Listing) =>
     return acc;
   }, {} as GroupedListings);
 
-app.get('/', (_req, res) => {
+app.get('/health', (_req, res) => {
   res.json({ status: 'ok', message: 'POST an array of vehicles to this endpoint' });
 });
 
