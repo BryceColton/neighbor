@@ -2,18 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.solveMultiVehicle = solveMultiVehicle;
 function solveMultiVehicle(vehicles, listingsByLocation) {
-    // Sorting vehicles by largest to smalles length based off of the minimum length required
-    // This will help know which vehicles should go in which locations
+    // Sorting vehicles by largest to smalles length based off of the minimum length
     const spreadVehicles = vehicles
         .flatMap(vehicle => Array.from({ length: vehicle.quantity }, () => vehicle.length))
         .sort((a, b) => b - a);
     const results = [];
     for (const [location_id, listings] of Object.entries(listingsByLocation)) {
-        if (cheapestSubset(spreadVehicles, listings)) {
+        const subset = cheapestSubset(spreadVehicles, listings);
+        if (subset) {
             results.push({
                 location_id,
-                listing_ids: listings.map(listing => listing.id),
-                total_price_in_cents: listings.reduce((s, l) => s + l.price_in_cents, 0)
+                listing_ids: subset.map(l => l.id),
+                total_price_in_cents: subset.reduce((s, l) => s + l.price_in_cents, 0)
             });
         }
     }
@@ -44,8 +44,10 @@ function vehiclesFit(vehicleLengths, listings) {
 function cheapestSubset(vehicleLengths, listings) {
     if (!listings.length)
         return null;
-    // Get listings sorted by price per length, which sites are most cost effective
-    const sorted = [...listings].sort((a, b) => (a.price_in_cents / a.length) - (b.price_in_cents / b.length));
+    // Getting listings by price per length
+    const sorted = listings
+        .filter(l => l.length > 0)
+        .sort((a, b) => (a.price_in_cents / a.length) - (b.price_in_cents / b.length));
     const selectedListings = [];
     for (const l of sorted) {
         selectedListings.push(l);

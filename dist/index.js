@@ -9,6 +9,7 @@ const algorithm_1 = require("./algorithm");
 const listings_json_1 = __importDefault(require("./data/listings.json"));
 const process_1 = __importDefault(require("process"));
 const app = (0, express_1.default)();
+// I used a frontend to help test
 app.use((0, cors_1.default)({ origin: 'http://127.0.0.1:5500' }));
 app.use(express_1.default.json());
 const listingsByLocation = listings_json_1.default.reduce((acc, l) => {
